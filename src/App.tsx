@@ -4,13 +4,22 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {addTracks, setupPlayer} from './services/musicPlayerService';
+import ControlCenter from './componenets/ControlCenter';
+import TrackPlayer, {
+  State,
+  Track,
+  usePlaybackState,
+} from 'react-native-track-player';
+import SongInfo from './componenets/SongInfo';
+import SongSlider from './componenets/SongSlider';
 
 const App = () => {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const playbackState = usePlaybackState();
+  const [currentTrack, setCurrentTrack] = useState<Track | null>();
 
   const handlePlayerSetup = async () => {
     const isSetup = await setupPlayer();
@@ -26,6 +35,21 @@ const App = () => {
     handlePlayerSetup();
   }, []);
 
+  const handleGetCurrentTrack = async () => {
+    const activeTrack = await TrackPlayer.getActiveTrack();
+    setCurrentTrack(activeTrack);
+  };
+
+  useEffect(() => {
+    if (
+      isPlayerReady &&
+      playbackState.state !== State.Paused &&
+      playbackState.state !== State.Playing
+    ) {
+      handleGetCurrentTrack();
+    }
+  }, [isPlayerReady, playbackState]);
+
   if (!isPlayerReady)
     return (
       <SafeAreaView>
@@ -34,13 +58,19 @@ const App = () => {
     );
 
   return (
-    <SafeAreaView>
-      <StatusBar />
-      <Text>App</Text>
+    <SafeAreaView style={styles.container}>
+      <SongInfo track={currentTrack} />
+      <SongSlider />
+      <ControlCenter />
     </SafeAreaView>
   );
 };
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+});
