@@ -7,14 +7,14 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {addTracks, setupPlayer} from './services/musicPlayerService';
-import ControlCenter from './componenets/ControlCenter';
+import ControlCenter from './components/ControlCenter';
 import TrackPlayer, {
   State,
   Track,
   usePlaybackState,
 } from 'react-native-track-player';
-import SongInfo from './componenets/SongInfo';
-import SongSlider from './componenets/SongSlider';
+import SongInfo from './components/SongInfo';
+import SongSlider from './components/SongSlider';
 
 const App = () => {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
