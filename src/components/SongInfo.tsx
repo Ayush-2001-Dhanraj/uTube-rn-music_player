@@ -9,10 +9,13 @@ type SongInfoProps = {
 const SongInfo = ({track}: SongInfoProps) => {
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.artwork}
-        source={{uri: track?.artwork?.toString()}}
-      />
+      {track?.artwork && (
+        <Image
+          style={styles.artwork}
+          source={{uri: track?.artwork?.toString()}}
+        />
+      )}
+
       <View>
         <Text style={[styles.txt, styles.title]}>{track?.title}</Text>
         <Text style={styles.txt}>
